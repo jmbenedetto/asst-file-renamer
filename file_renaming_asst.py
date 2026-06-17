@@ -8,8 +8,6 @@ import json
 from pprint import pprint
 import subprocess
 import openai
-from PIL import Image
-import pytesseract
 import PyPDF2
 from docx import Document
 import openpyxl
@@ -207,6 +205,18 @@ def get_slice_size(total):
         raise ValueError('Error: No text extracted. EXTRACTION_PERCENT needs to be increased to rename this file.')
     return slice_len
 
+def extract_text_with_mac_ocr(file_path):
+    result = subprocess.run(
+        ['mac-ocr', file_path],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        error = result.stderr.strip() or result.stdout.strip() or 'unknown mac-ocr error'
+        raise RuntimeError(f'mac-ocr failed for {file_path}: {error}')
+    return result.stdout
+
 def extract_text_from_file(file_path):
     file_extension = os.path.splitext(file_path)[1].lower()
 
@@ -240,8 +250,7 @@ def extract_text_from_file(file_path):
         return df.head(slice_length).to_string(index=False)
 
     elif file_extension in ['.jpg', '.jpeg', '.png']:
-        img = Image.open(file_path)
-        return pytesseract.image_to_string(img)
+        return extract_text_with_mac_ocr(file_path)
     else:
         raise ValueError("Error: Unsupported file format")
 

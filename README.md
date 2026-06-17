@@ -9,15 +9,18 @@ An OpenAI Assistant (API) for renaming files base on their contents, using Pytho
 1. clone [File Renamer Assistant](https://github.com/toadlyBroodle/asst-file-renamer) repository:
     ```git clone https://github.com/toadlyBroodle/asst-file-renamer.git```
 2. install dependencies
-    ```pip3 install python-docx openpyxl PyPDF2 pillow pytesseract```
+    ```pip3 install python-docx openpyxl PyPDF2```
 
-3. Save new *credentials.json* file to working directory, replacing with your API key, using format:
+3. install macOS OCR dependency
+    ```npm install -g mac-ocr```
+
+4. Save new *credentials.json* file to working directory, replacing with your API key, using format:
     ```
     {
         "openai_api_key": "sk-####",
     }
     ```
-4. Create new assistant:
+5. Create new assistant:
     `python3 file_renamer_asst.py --asst_create`
 
 ## Usage, overview
